@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
     # Create the graph
 
-    graph = Graph(is_directed=False)
+    graph = Graph(is_directed=True)
 
     # Add some vertices
     graph.add_vertex('A')
