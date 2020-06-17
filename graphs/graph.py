@@ -23,8 +23,6 @@ class Vertex(object):
         """
         self.__neighbors_dict[vertex_obj.__id] = vertex_obj
 
-        pass
-
     def __str__(self):
         """Output the list of neighbors of this vertex."""
         neighbor_ids = list(self.__neighbors_dict.keys())
@@ -85,6 +83,7 @@ class Graph:
         vertex_id1 (string): The unique identifier of the first vertex.
         vertex_id2 (string): The unique identifier of the second vertex.
         """
+
         self.__vertex_dict[vertex_id1].add_neighbor(self.__vertex_dict[vertex_id2])
 
         if not self.__is_directed:
@@ -167,7 +166,7 @@ class Graph:
 
         # while queue is not empty
         while queue:
-            current_vertex_obj = queue.pop() # vertex obj to visit next
+            current_vertex_obj = queue.popleft() # vertex obj to visit next
             current_vertex_id = current_vertex_obj.get_id()
 
             # found target, can stop the loop early
@@ -198,4 +197,3 @@ class Graph:
         Returns:
         list<string>: All vertex ids that are `target_distance` away from the start vertex
         """
-        pass
