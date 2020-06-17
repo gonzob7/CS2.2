@@ -87,8 +87,8 @@ class Graph:
         self.__vertex_dict[vertex_id1].add_neighbor(self.__vertex_dict[vertex_id2])
 
         if not self.__is_directed:
-            self.__vertex_dict[vertex_id1].add_neighbor(self.__vertex_dict[vertex_id2])
-        pass
+            self.__vertex_dict[vertex_id2].add_neighbor(self.__vertex_dict[vertex_id1])
+
 
     def get_vertices(self):
         """
