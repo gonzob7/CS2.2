@@ -129,7 +129,7 @@ class Graph:
         queue.append(self.get_vertex(start_id))
 
         while queue:
-            current_vertex_obj = queue.pop()
+            current_vertex_obj = queue.popleft()
             current_vertex_id = current_vertex_obj.get_id()
 
             # Process current node
@@ -197,3 +197,40 @@ class Graph:
         Returns:
         list<string>: All vertex ids that are `target_distance` away from the start vertex
         """
+        if not self.contains_id(start_id):
+            raise KeyError("One or both vertices are not in the graph!")
+
+        vertex_distance_to_path = {
+            start_id: 0 # only one thing in the path
+        }
+
+        target_vertices = []
+        #have a set of visited vertices
+        visited = set()
+        visited.add(start_id)
+        #deque to store vertex and distance
+        queue = deque()
+        queue.append(self.get_vertex(start_id))
+
+        found_a_target_distance = False
+
+        while queue:
+            current_vertex_obj = queue.pop() # vertex obj to visit next
+            current_vertex_id = current_vertex_obj.get_id()
+
+            if vertex_distance_to_path[current_vertex_id] == target_distance-1:
+                found_a_target_distance = True
+            neighbors = current_vertex_obj.get_neighbors()
+
+            for neighbor in neighbors:
+                if neighbor.get_id() not in visited:
+                    if neighbor.get_id() not in vertex_distance_to_path:
+                        vertex_distance_to_path[neighbor.get_id()] = vertex_distance_to_path[current_vertex_id]
+                    vertex_distance_to_path[neighbor.get_id()] += 1
+                    if vertex_distance_to_path[neighbor.get_id()] == target_distance:
+                        target_vertices.append(neighbor.get_id())
+                    if found_a_target_distance == False:
+                        visited.add(neighbor.get_id())
+                        queue.append(neighbor)
+
+        return target_vertices
