@@ -369,12 +369,11 @@ class Graph:
         return vertex_id_to_path[target_id] #path found, return
 
 
-
     def contains_cycle(self):
         """
         Return True if the directed graph contains a cycle, False otherwise.
         """
-        if not self.is_directed:
+        if not self.__is_directed:
             raise KeyError("This graph is not directed!")
 
         all_vertex_ids = list(self.__vertex_dict.keys())
@@ -396,8 +395,8 @@ class Graph:
             while stack:
                 current_path = set()
 
-                current_vertex_obj = stack.pop()
-                current_vertex_id = current_vertex_obj.get_id()
+                current_vertex_id = stack.pop()
+                current_vertex_obj = self.get_vertex(current_vertex_id)
 
                 # Add its neighbors to the stack
                 for neighbor in current_vertex_obj.get_neighbors():
@@ -407,4 +406,18 @@ class Graph:
                     if neighbor.get_id() in current_path:
                         return True #is cycle
 
-        return False #no cycles
+            return False #no cycles
+
+
+    def topological_sort(self):
+        """
+        Return a valid ordering of vertices in a directed acyclic graph.
+        If the graph contains a cycle, throw a ValueError.
+        """
+        # TODO: Create a stack to hold the vertex ordering.
+        stack = deque()
+
+        # TODO: For each unvisited vertex, execute a DFS from that vertex.
+        # TODO: On the way back up the recursion tree (that is, after visiting a
+        # vertex's neighbors), add the vertex to the stack.
+        # TODO: Reverse the contents of the stack and return it as a valid ordering.
