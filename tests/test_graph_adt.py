@@ -98,5 +98,74 @@ class TestReadGraphFromFile(unittest.TestCase):
         self.assertEqual(vertices_3_away, ['F'])
 
 
+    def test_not_bipartite(self):
+        """Test that a cycle on 3 vertices is NOT bipartite."""
+        graph = Graph(is_directed=False)
+        graph.add_vertex('A')
+        graph.add_vertex('B')
+        graph.add_vertex('C')
+        graph.add_edge('A','B')
+        graph.add_edge('A','C')
+        graph.add_edge('B','C')
+
+        self.assertFalse(graph.is_bipartite())
+
+
+    # @weight(3)
+    def test_is_bipartite_cycle(self):
+        """Test that a cycle on 4 vertices is bipartite."""
+        graph = Graph(is_directed=False)
+        graph.add_vertex('A')
+        graph.add_vertex('B')
+        graph.add_vertex('C')
+        graph.add_vertex('D')
+        graph.add_edge('A','B')
+        graph.add_edge('B','C')
+        graph.add_edge('C','D')
+        graph.add_edge('A','D')
+
+        self.assertTrue(graph.is_bipartite())
+
+
+    # @weight(3)
+    def test_is_bipartite_tree(self):
+        """Test that a tree on 4 vertices is bipartite."""
+        graph = Graph(is_directed=False)
+        vertex_a = graph.add_vertex('A')
+        vertex_b = graph.add_vertex('B')
+        vertex_c = graph.add_vertex('C')
+        vertex_d = graph.add_vertex('D')
+        graph.add_edge('A','B')
+        graph.add_edge('A','C')
+        graph.add_edge('A','D')
+
+        self.assertTrue(graph.is_bipartite())
+
+
+    def test_get_connected_components(self):
+        """Get connected components of a graph."""
+        graph = Graph(is_directed=False)
+        vertex_a = graph.add_vertex('A')
+        vertex_b = graph.add_vertex('B')
+        vertex_c = graph.add_vertex('C')
+        vertex_d = graph.add_vertex('D')
+        vertex_d = graph.add_vertex('E')
+        vertex_d = graph.add_vertex('F')
+        graph.add_edge('A','B')
+        graph.add_edge('A','C')
+        graph.add_edge('B','C')
+        graph.add_edge('D', 'E')
+
+        expected_components = [
+            ['A', 'B', 'C'],
+            ['D', 'E'],
+            ['F']
+        ]
+        # sort each component for ease of comparison
+        actual_components = graph.get_connected_components()
+        actual_components = [sorted(comp) for comp in actual_components]
+
+        self.assertCountEqual(expected_components, actual_components)
+
 if __name__ == '__main__':
     unittest.main()

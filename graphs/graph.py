@@ -250,7 +250,7 @@ class Graph:
         seen.add(start_id)
 
         # Keep a queue so that we visit vertices in the appropriate order
-        queue = []
+        queue = deque()
         queue.append(start_id)
 
         colors = {
@@ -260,7 +260,7 @@ class Graph:
         current_color = 0
 
         while queue:
-            current_vertex_id = queue.pop(0)
+            current_vertex_id = queue.pop()
             current_vertex_obj = self.get_vertex(current_vertex_id)
             current_color = colors[current_vertex_id]
             seen.add(current_vertex_id)
@@ -287,25 +287,25 @@ class Graph:
         represented as a list of vertex ids.
         """
 
-        all_vertex_ids = [self.__vertex_dict.keys()]
+        all_vertex_ids = list(self.__vertex_dict.keys())
 
-        components = []
+        components = list()
 
-        for vertex in all_vertex_ids:
-            start_vertex_id = all_vertex_ids.pop()
-            start_vertex_obj = self.get_vertex(start_id)
+        while all_vertex_ids:
+            start_vertex_id = list(all_vertex_ids).pop()
+            start_vertex_obj = self.get_vertex(start_vertex_id)
+            all_vertex_ids.remove(start_vertex_id)
 
             # Keep a set to denote which vertices we've seen before
             seen = set()
-            seen.add(start_id)
+            seen.add(start_vertex_id)
 
             # Keep a queue so that we visit vertices in the appropriate order
-            queue = []
-            queue.append(start_id)
-
+            queue = deque()
+            queue.append(start_vertex_id)
             #bfs on each
             while queue:
-                current_vertex_id = queue.pop(0)
+                current_vertex_id = queue.pop()
                 current_vertex_obj = self.get_vertex(current_vertex_id)
 
                 neighbors = current_vertex_obj.get_neighbors()
@@ -313,10 +313,22 @@ class Graph:
                 for neighbor in neighbors:
                     neighbor_id = neighbor.get_id()
 
+                    if neighbor_id in all_vertex_ids:
+                        all_vertex_ids.remove(neighbor_id)
+
                     if neighbor_id not in seen:
                         queue.append(neighbor_id)
                         seen.add(neighbor_id)
 
-            components.append(list(seen))
+            components.append(seen)
 
         return(components)
+
+
+
+    def find_path_dfs_iter(self, start_id, target_id):
+        """
+        Use DFS with a stack to find a path from start_id to target_id.
+        """
+        if not self.contains_id(start_id) or not self.contains_id(target_id):
+            raise KeyError("One or both vertices are not in the graph!")
