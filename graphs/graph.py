@@ -250,12 +250,13 @@ class Graph:
         seen.add(start_id)
 
         # Keep a queue so that we visit vertices in the appropriate order
-        queue = [start_id]
+        queue = []
+        queue.append(start_id)
 
         colors = {
             start_id: 0
         }
-        
+
         current_color = 0
 
         while queue:
@@ -264,9 +265,9 @@ class Graph:
             current_color = colors[current_vertex_id]
             seen.add(current_vertex_id)
 
-            # neighbors = current_vertex_obj.get_neighbors()
+            neighbors = current_vertex_obj.get_neighbors()
 
-            for neighbor in current_vertex_obj.get_neighbors():
+            for neighbor in neighbors:
                 neighbor_id = neighbor.get_id()
 
                 if neighbor_id in colors:
@@ -278,3 +279,44 @@ class Graph:
 
 
         return True #the graph is bipartite
+
+
+    def get_connected_components(self):
+        """
+        Return a list of all connected components, with each connected component
+        represented as a list of vertex ids.
+        """
+
+        all_vertex_ids = [self.__vertex_dict.keys()]
+
+        components = []
+
+        for vertex in all_vertex_ids:
+            start_vertex_id = all_vertex_ids.pop()
+            start_vertex_obj = self.get_vertex(start_id)
+
+            # Keep a set to denote which vertices we've seen before
+            seen = set()
+            seen.add(start_id)
+
+            # Keep a queue so that we visit vertices in the appropriate order
+            queue = []
+            queue.append(start_id)
+
+            #bfs on each
+            while queue:
+                current_vertex_id = queue.pop(0)
+                current_vertex_obj = self.get_vertex(current_vertex_id)
+
+                neighbors = current_vertex_obj.get_neighbors()
+
+                for neighbor in neighbors:
+                    neighbor_id = neighbor.get_id()
+
+                    if neighbor_id not in seen:
+                        queue.append(neighbor_id)
+                        seen.add(neighbor_id)
+
+            components.append(list(seen))
+
+        return(components)
