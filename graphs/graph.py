@@ -234,3 +234,51 @@ class Graph:
                         queue.append(neighbor)
 
         return target_vertices
+
+
+    def is_bipartite(self):
+
+        """
+        Return True if the graph is bipartite, and False otherwise.
+        """
+
+        #where to start the bfs
+        start_id = list(self.__vertex_dict.keys())[0]
+
+        # Keep a set to denote which vertices we've seen before
+        seen = set()
+        seen.add(start_id)
+
+        # Keep a queue so that we visit vertices in the appropriate order
+        queue = deque()
+        queue.append(self.get_vertex(start_id))
+
+        colors = {
+            color: 0
+        }
+
+        possible_colors = [0,1]
+
+        current_color = 0
+
+        while queue:
+            current_vertex_id = queue.popleft()
+            current_vertex_obj = self.get_vertex(current_vertex_id)
+            current_color = colors[current_vertex_id]
+            seen.add(current_vertex_id)
+
+            neighbors = current_vertex_obj.get_neighbors()
+
+            for neighbor in neighbors:
+                neighbor_id = neighbor.get_id()
+
+                if neighbor_id in colors:
+                    if colors[neighbor_id] == current_color: #not bipartite
+                        return False
+                else:
+                    possible_colors = possible_colors.reverse() #set the color to the opposite
+                    colors[neighbor_id] = (possible_colors[0])
+                    queue.append(neighbor_id)
+
+
+            return True #the graph is bipartite
