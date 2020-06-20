@@ -167,5 +167,26 @@ class TestReadGraphFromFile(unittest.TestCase):
 
         self.assertCountEqual(expected_components, actual_components)
 
+    def test_find_path_dfs(self):
+        graph = Graph(is_directed=True)
+        graph.add_vertex('A')
+        graph.add_vertex('B')
+        graph.add_vertex('C')
+        graph.add_edge('A','B')
+        graph.add_edge('B','C')
+        graph.add_edge('C','A')
+
+        path = graph.find_path_dfs_iter('A', 'C')
+        self.assertEqual(path, ['A', 'B', 'C'])
+
+    def test_contains_cycle(self):
+        graph = Graph(is_directed=True)
+        graph.add_vertex('A')
+        graph.add_vertex('B')
+        graph.add_vertex('C')
+        graph.add_edge('A','B')
+        graph.add_edge('B','C')
+        graph.add_edge('C','A')
+
 if __name__ == '__main__':
     unittest.main()

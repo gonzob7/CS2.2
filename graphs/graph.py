@@ -330,5 +330,81 @@ class Graph:
         """
         Use DFS with a stack to find a path from start_id to target_id.
         """
-        if not self.contains_id(start_id) or not self.contains_id(target_id):
+        if not self.contains_id(start_id):
             raise KeyError("One or both vertices are not in the graph!")
+
+        # vertex keys we've seen before and their paths from the start vertex
+        vertex_id_to_path = {
+            start_id: [start_id] # only one thing in the path
+        }
+
+        # Keep a set to denote which vertices we've seen before
+        seen = set()
+        seen.add(start_id)
+
+        # Keep a stack so that we visit vertices in the appropriate order
+        stack = deque()
+        stack.append(self.get_vertex(start_id))
+
+        while stack:
+            current_vertex_obj = stack.pop()
+            current_vertex_id = current_vertex_obj.get_id()
+
+            # found target, can stop the loop early
+            if current_vertex_id == target_id:
+                break
+
+            # Add its neighbors to the stack
+            for neighbor in current_vertex_obj.get_neighbors():
+                if neighbor.get_id() not in vertex_id_to_path:
+                    current_path = vertex_id_to_path[current_vertex_id]
+                    # extend the path by 1 vertex
+                    next_path = current_path + [neighbor.get_id()]
+                    vertex_id_to_path[neighbor.get_id()] = next_path
+                    stack.append(neighbor)
+
+        if target_id not in vertex_id_to_path: # path not found
+            return None
+
+        return vertex_id_to_path[target_id] #path found, return
+
+
+
+    def contains_cycle(self):
+        """
+        Return True if the directed graph contains a cycle, False otherwise.
+        """
+        if not self.is_directed:
+            raise KeyError("This graph is not directed!")
+
+        all_vertex_ids = list(self.__vertex_dict.keys())
+
+        while all_vertex_ids:
+            start_vertex_id = list(all_vertex_ids).pop()
+            start_vertex_obj = self.get_vertex(start_vertex_id)
+            all_vertex_ids.remove(start_vertex_id)
+
+            # Keep a set to denote which vertices we've seen before
+            seen = set()
+            seen.add(start_vertex_id)
+
+            # Keep a stack so that we visit vertices in the appropriate order
+            stack = deque()
+            stack.append(start_vertex_id)
+
+            #dfs on each
+            while stack:
+                current_path = set()
+
+                current_vertex_obj = stack.pop()
+                current_vertex_id = current_vertex_obj.get_id()
+
+                # Add its neighbors to the stack
+                for neighbor in current_vertex_obj.get_neighbors():
+                    if neighbor.get_id() not in current_path:
+                        # add vertex to current_path set
+                        current_path.add(neighbor.get_id())
+                    if neighbor.get_id() in current_path:
+                        return True #is cycle
+
+        return False #no cycles
