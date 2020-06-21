@@ -162,7 +162,7 @@ class TestReadGraphFromFile(unittest.TestCase):
             ['F']
         ]
         # sort each component for ease of comparison
-        actual_components = graph.get_connected_components()
+        actual_components = graph.find_connected_components()
         actual_components = [sorted(comp) for comp in actual_components]
 
         self.assertCountEqual(expected_components, actual_components)

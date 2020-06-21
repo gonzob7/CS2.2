@@ -281,7 +281,7 @@ class Graph:
         return True #the graph is bipartite
 
 
-    def get_connected_components(self):
+    def find_connected_components(self):
         """
         Return a list of all connected components, with each connected component
         represented as a list of vertex ids.
