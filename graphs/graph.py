@@ -414,8 +414,16 @@ class Graph:
         Return a valid ordering of vertices in a directed acyclic graph.
         If the graph contains a cycle, throw a ValueError.
         """
+
+        if self.contains_cycle():
+            raise KeyError("This graph contains a cycle!")
+
         # TODO: Create a stack to hold the vertex ordering.
         stack = deque()
+
+        # Keep a set to denote which vertices we've seen before
+        seen = set()
+
 
         # TODO: For each unvisited vertex, execute a DFS from that vertex.
         # TODO: On the way back up the recursion tree (that is, after visiting a
