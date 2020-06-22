@@ -419,13 +419,24 @@ class Graph:
             raise KeyError("This graph contains a cycle!")
 
         # TODO: Create a stack to hold the vertex ordering.
-        stack = deque()
-
-        # Keep a set to denote which vertices we've seen before
+        stack = []
         seen = set()
-
-
         # TODO: For each unvisited vertex, execute a DFS from that vertex.
+        all_vertices = self.__vertex_dict.values()
+
+        for vertex in all_vertices:
+            if vertex not in seen:
+                neighbors = vertex.get_neighbors()
+                seen.add(vertex)
+
+                for neighbor in neighbors:
+                    if neighbor not in visited:
+                        seen.add_vertex()
+
+                stack.append(neighbor)
+
+
+            return stack.reverse()
         # TODO: On the way back up the recursion tree (that is, after visiting a
         # vertex's neighbors), add the vertex to the stack.
         # TODO: Reverse the contents of the stack and return it as a valid ordering.
